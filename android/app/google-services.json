@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "573784872365",
+    "project_id": "rn-fb-example-91b98",
+    "storage_bucket": "rn-fb-example-91b98.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573784872365:android:287c559da9748bfd463d24",
+        "android_client_info": {
+          "package_name": "com.foodappexamplewithfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMJAOoV982suLnJWMnA7uNfQ_qYgcQLgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
