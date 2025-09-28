@@ -1,10 +1,38 @@
-import { ImageBackground, Platform, StyleSheet, Text, View, Image } from 'react-native';
-import React from 'react';
+import {
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Alert,
+} from 'react-native';
+import React, { useState } from 'react';
 import MyTextInput from '@components/MyTextInput';
 import MyButton from '@components/MyButton';
 import SocialMedia from '@components/SocialMedia';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+} from '@react-native-firebase/auth';
 
-const SignUpScreen = () => {
+const SignUpScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const signUpTestFn = () => {
+    createUserWithEmailAndPassword(getAuth(), email, password)
+      .then(() => {
+        Alert.alert('User created with those credentials. Please login');
+        navigation.navigate('Login');
+      })
+      .catch(err => {
+        console.log(err.message);
+        Alert.alert(err.message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -19,11 +47,25 @@ const SignUpScreen = () => {
         <Text style={styles.title}>Fatmore</Text>
 
         <View style={styles.inputsContainer}>
-          <MyTextInput placeholder="Enter E-mail or User Name" />
-          <MyTextInput placeholder="Password" secureTextEntry />
-          <MyTextInput placeholder="Confirm Password" secureTextEntry />
+          <MyTextInput
+            value={email}
+            placeholder="Enter E-mail or User Name"
+            onChangeText={setEmail}
+          />
+          <MyTextInput
+            value={password}
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={setPassword}
+          />
+          <MyTextInput
+            value={confirmPassword}
+            placeholder="Confirm Password"
+            secureTextEntry
+            onChangeText={setConfirmPassword}
+          />
 
-          <MyButton title={'Sign Up'} />
+          <MyButton title={'Sign Up'} onPress={signUpTestFn} />
 
           <Text style={styles.text}>OR</Text>
           <SocialMedia />

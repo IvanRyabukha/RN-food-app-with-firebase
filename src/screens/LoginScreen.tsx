@@ -1,7 +1,7 @@
 import MyButton from '@components/MyButton';
 import MyTextInput from '@components/MyTextInput';
 import SocialMedia from '@components/SocialMedia';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Platform,
@@ -9,9 +9,36 @@ import {
   ImageBackground,
   Image,
   Text,
+  Alert,
 } from 'react-native';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+} from '@react-native-firebase/auth';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const loginWithEmailAndPassword = () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Enter email and password');
+      return;
+    }
+
+    signInWithEmailAndPassword(getAuth(), email, password)
+      .then(res => {
+        console.log(res);
+        Alert.alert('Logged In');
+        navigation.navigate('Home');
+      })
+      .catch(err => {
+        const code = err?.code ?? 'unknown';
+        const message = err?.message ?? 'Unknown error';
+        Alert.alert(code, message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -26,17 +53,24 @@ const LoginScreen = () => {
         <Text style={styles.title}>Fatmore</Text>
 
         <View style={styles.inputsContainer}>
-          <MyTextInput placeholder="Enter E-mail or User Name" />
-          <MyTextInput placeholder="Password" secureTextEntry />
+          <MyTextInput
+            placeholder="Enter E-mail or User Name"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <MyTextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
 
           <Text style={styles.textDontHave}>Dont have an account yet?</Text>
-          <MyButton title={'Login'} />
+          <MyButton title={'Login'} onPress={loginWithEmailAndPassword} />
 
           <Text style={styles.text}>OR</Text>
           <SocialMedia />
         </View>
-
-        
       </ImageBackground>
     </View>
   );
@@ -83,17 +117,17 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 6,
   },
-  textDontHave :{
+  textDontHave: {
     alignSelf: 'flex-end',
     marginRight: 10,
     color: '#000000',
     marginBottom: 15,
-    fontFamily: 'NovaFlat-Regular'
+    fontFamily: 'NovaFlat-Regular',
   },
   text: {
     fontSize: 20,
     color: 'gray',
     marginTop: 20,
-    fontFamily: 'Audiowide-Regular'
-  }
+    fontFamily: 'Audiowide-Regular',
+  },
 });

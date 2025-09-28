@@ -11,6 +11,7 @@ module.exports = {
       '|@react-native-community' +
       '|react-native-gesture-handler' +
       '|react-native-reanimated' +
+      '|@react-native-firebase' +
       ')/)',
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],

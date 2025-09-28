@@ -4,11 +4,15 @@ import { Text, StyleSheet } from 'react-native';
 
 interface IMyButtonProps {
   title: string;
+  onPress: () => void;
 }
 
-const MyButton: React.FC<IMyButtonProps> = ({ title }) => {
+const MyButton: React.FC<IMyButtonProps> = ({ title, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={onPress}
+    >
       <Text style={styles.title}>{title}</Text>
     </TouchableOpacity>
   )

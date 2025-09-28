@@ -1,16 +1,13 @@
-import React from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import React from 'react';
+import { StyleSheet, TextInput, View, Text } from 'react-native';
 
-const MyTextInput = ({...props}) => {
+const MyTextInput = ({ ...props }) => {
   return (
     <View style={styles.container}>
-      <TextInput 
-        style={styles.input}
-        {...props}
-      />
+      <TextInput style={styles.input} {...props} />
     </View>
-  )
-}
+  );
+};
 
 export default MyTextInput;
 
@@ -28,5 +25,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     borderBottomWidth: 0.8,
     borderBottomColor: 'gray',
-  }
-})
+  },
+});
