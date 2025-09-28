@@ -2,6 +2,7 @@ import '@react-native-firebase/app';
 import messaging from '@react-native-firebase/messaging';
 import MyStack from '@navigation/MyStack';
 import { NavigationContainer } from '@react-navigation/native';
+import { useEffect } from 'react';
 
 function App() {
   async function requestUserPermission() {
@@ -13,7 +14,17 @@ function App() {
     if (enabled) {
       console.log('Authorization status:', authStatus);
     }
-  }
+  };
+
+  const getToken = async () => {
+    const token = await messaging().getToken();
+    console.log("Token = ", token);
+  };
+
+  useEffect(() => {
+    requestUserPermission();
+    getToken();
+  }, []);
 
   return (
     <NavigationContainer>
