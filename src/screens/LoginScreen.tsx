@@ -1,7 +1,7 @@
 import MyButton from '@components/MyButton';
 import MyTextInput from '@components/MyTextInput';
 import SocialMedia from '@components/SocialMedia';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Platform,
@@ -10,15 +10,57 @@ import {
   Image,
   Text,
   Alert,
+  Button,
 } from 'react-native';
 import {
   getAuth,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithCredential,
 } from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '573784872365-tcb0mhopm065eb88o8uj680otjkn2j8m.apps.googleusercontent.com',
+    });
+  }, []);
+
+  async function onGoogleButtonPress() {
+    try {
+      // Check if your device supports Google Play
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+      // Get the users ID token
+      const signInResult = await GoogleSignin.signIn();
+
+      // Try the new style of google-sign in result, from v13+ of that module
+      const idToken = signInResult.data?.idToken;
+
+      console.log(signInResult.data?.user);
+      Alert.alert('Success login');
+
+      if (!idToken) {
+        throw new Error('No ID token found');
+      }
+
+      // Create a Google credential with the token
+      const googleCredential = GoogleAuthProvider.credential(
+        signInResult.data?.idToken,
+      );
+
+      // Sign-in the user with the credential
+      return signInWithCredential(getAuth(), googleCredential);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const loginWithEmailAndPassword = () => {
     if (!email || !password) {
@@ -67,6 +109,8 @@ const LoginScreen = ({ navigation }) => {
 
           <Text style={styles.textDontHave}>Dont have an account yet?</Text>
           <MyButton title={'Login'} onPress={loginWithEmailAndPassword} />
+
+          <Button title="Login with google" onPress={onGoogleButtonPress} />
 
           <Text style={styles.text}>OR</Text>
           <SocialMedia />
