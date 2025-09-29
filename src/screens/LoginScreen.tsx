@@ -31,12 +31,14 @@ const LoginScreen = ({ navigation }) => {
     });
   }, []);
 
-  async function onGoogleButtonPress() {
+  const onGoogleButtonPress = async () => {
     try {
       // Check if your device supports Google Play
       await GoogleSignin.hasPlayServices({
         showPlayServicesUpdateDialog: true,
       });
+
+      await GoogleSignin.signOut();
       // Get the users ID token
       const signInResult = await GoogleSignin.signIn();
 
@@ -44,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
       const idToken = signInResult.data?.idToken;
 
       console.log(signInResult.data?.user);
-      Alert.alert('Success login');
+      navigation.navigate('Home');
 
       if (!idToken) {
         throw new Error('No ID token found');
@@ -60,7 +62,7 @@ const LoginScreen = ({ navigation }) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const loginWithEmailAndPassword = () => {
     if (!email || !password) {
@@ -110,10 +112,8 @@ const LoginScreen = ({ navigation }) => {
           <Text style={styles.textDontHave}>Dont have an account yet?</Text>
           <MyButton title={'Login'} onPress={loginWithEmailAndPassword} />
 
-          <Button title="Login with google" onPress={onGoogleButtonPress} />
-
           <Text style={styles.text}>OR</Text>
-          <SocialMedia />
+          <SocialMedia onGoogleLogin={onGoogleButtonPress} />
         </View>
       </ImageBackground>
     </View>
